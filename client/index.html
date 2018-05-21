@@ -1,0 +1,160 @@
+<div id="gameDiv">
+<canvas id="canvas" width="500" height="500" style="position:absolute;border: solid 1px black"></canvas>
+<button id="join_game_button" onclick="joinGame()" style="position:absolute; top:250px;left:250px;">Join Game</button>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+
+
+<script>
+var join_game_button = document.getElementById("join_game_button");
+var ctx = document.getElementById("canvas").getContext("2d");
+ctx.font = "30px";
+
+var socket = io();
+
+var joinGame = function(){
+  socket.emit('findNewRoom',{gamemode:'casual',id:socket.id});
+}
+socket.on('joinRoomSuccess',function(data){
+  join_game_button.style = "display:none";
+});
+
+  var Player = function(initPack){
+    var self ={
+      id: initPack.id,
+      x: initPack.x,
+      y: initPack.y,
+      spdX: initPack.spdX,
+      spdY: initPack.spdY,
+      pressingUp: initPack.pressingRight,
+      pressingLeft: initPack.pressingLeft,
+      pressingUp: initPack.pressingUp,
+      pressingDown: initPack.pressingDown
+
+    };
+    self.draw = function(){
+      ctx.fillText("P",self.x,self.y);
+    }
+    Player.list[self.id] = self;
+    return self;
+  }
+  Player.list = {};
+
+//initpialize object in world
+  socket.on("initPack", function(data){
+
+    if(data!== null){
+      if(data[Object.keys(data)[0]] !== undefined){
+        //console.log(data[Object.keys(data)[0]][0].players);
+        var players_array = data[Object.keys(data)[0]][0].players;
+        for(var i in players_array)
+        {
+          new Player(players_array[i]);
+        }
+
+      }
+      if(data.initBullet !== undefined){
+
+
+      }
+    }
+
+  });
+
+//update objects in world
+    socket.on("updatePack", function(data){
+      if(data !== null){
+        //console.log(data);
+        if(data[Object.keys(data)[1]] !== undefined){
+          var Object_with_players = data[Object.keys(data)[1]];
+          var size = Object.size(Object_with_players);
+        //console.log(size);
+          //console.log(player_array);
+          for(var i=0;i<size;i++){
+          //console.log(i);
+
+          var player_array = Object_with_players[Object.keys(Object_with_players)[i]];
+            //console.log(player_array.id);
+            //console.log(player_array.id)
+           var player = player_array;
+           Player.list[player.id].x = player.x;
+           Player.list[player.id].y = player.y;
+
+
+        }
+      }
+      }
+    });
+
+//remove objects from world
+  socket.on("removePack", function(data){
+    //console.log(data);
+    if(data !== undefined){
+      // data[Object.keys(data)[something]] something- for index notation Of objest inside object
+      if(data[Object.keys(data)[0]] !== undefined){
+        var Object_with_players = data[Object.keys(data)[0]];
+        var size = Object.size(Object_with_players);
+      //console.log(size);
+        //console.log(player_array);
+        for(var i=0;i<size;i++){
+        //console.log(i);
+
+        var player_array = Object_with_players[Object.keys(Object_with_players)[i]];
+          //console.log(player_array.id);
+          //console.log(player_array.id)
+         var player = player_array;
+         console.log(player.players.id);
+        delete Player.list[player.players.id];
+
+      }
+    }
+    }
+  });
+
+  setInterval(function(){
+
+    ctx.clearRect(0,0,500,500);
+    for(var i in Player.list){
+      var player  = Player.list[i];
+      player.draw();
+    }
+
+  },40);
+
+
+
+document.onkeydown  = function(event){
+  if(event.keyCode == 68)
+    socket.emit('keyPress', {inputId: 'right', state:true});
+  else if(event.keyCode == 83)
+    socket.emit('keyPress', {inputId: 'down', state:true});
+  else if(event.keyCode == 65)
+    socket.emit('keyPress', {inputId: 'left', state:true});
+  else if(event.keyCode == 87)
+    socket.emit('keyPress', {inputId: 'up', state:true});
+
+}
+document.onkeyup  = function(event){
+  if(event.keyCode == 68)
+    socket.emit('keyPress', {inputId: 'right', state:false});
+  else if(event.keyCode == 83)
+    socket.emit('keyPress', {inputId: 'down', state:false});
+  else if(event.keyCode == 65)
+    socket.emit('keyPress', {inputId: 'left', state:false});
+  else if(event.keyCode == 87)
+    socket.emit('keyPress', {inputId: 'up', state:false});
+
+}
+
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+</script>
