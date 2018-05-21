@@ -5,10 +5,17 @@
 <body style="background-color:black; color:white;">
   <div class="container">
     <div class="col">
+
 <div id="gameDiv">
+  <div id="gameScreen">
 <canvas id="canvas" width="500" height="500" style="position:absolute;border: solid 1px black"></canvas>
-<button id="join_game_button" onclick="joinGame()" style="position:absolute; top:250px;left:250px;">Join Game</button>
 </div>
+<div id="playerUi" style="position:absolute; top:0;left:0px;">
+  <button id="join_game_button" onclick="joinGame()" style="position:absolute; top:250px;left:250px;">Join Game</button>
+  <button id="left_game_button" onclick="leftGame()" style=" display:none;">Left Room</button>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -17,6 +24,7 @@
 
 <script>
 var join_game_button = document.getElementById("join_game_button");
+var left_game_button = document.getElementById("left_game_button");
 var ctx = document.getElementById("canvas").getContext("2d");
 ctx.font = "30px";
 var WIDTH = 500;
@@ -28,6 +36,19 @@ var joinGame = function(){
 }
 socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
+  left_game_button.style = "display:block";
+});
+var leftGame = function(){
+  socket.emit('leftRoom',socket.id);
+}
+socket.on('leftSuccess',function(data){
+  if(data!== undefined){
+
+    if(data.state){
+  join_game_button.style = "display:inline-block";
+  left_game_button.style = "display:none";
+}
+}
 });
 
 var Img = {};

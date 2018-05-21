@@ -35,6 +35,7 @@ var Room = function(){
 
 //when player close window so, disconnect  , player that joined to specific room will disconnect
     socket.on("disconnect",function(){
+
       if(self.players[socket.id]!==undefined){
         self.removePlayer(self.id,socket.id);
       }
@@ -129,15 +130,15 @@ Room.removePack = function(room_id,player_id){
   return pack;
 
 }
-Room.witchRoomIsPlayer = function(socket){
+Room.witchRoomIsPlayer = function(socketId){
   //check witch room is players
   var room_id = "";
   for(var i in Room.list){
     var room = Room.list[i];
     for(var i in room.socketlist)
     {
-      var socket_room = room.socketlist[i];
-      if(socket_room == socket){
+      var socket_room = room.socketlist[i].id;
+      if(socket_room == socketId){
         room_id = room.id;
       }
     }
@@ -294,6 +295,24 @@ socket.on('findNewRoom', function(data){
 console.log(Room.list);
 });
 
+socket.on("leftRoom", function(data){
+  console.log(data);
+  var player_socket = data;
+var room_id = Room.witchRoomIsPlayer(player_socket);
+    if(Room.list[room_id].players[player_socket.id]!==undefined){
+      Room.list[room_id].removePlayer(Room.list[room_id].id,player_socket.id);
+    }
+    if(Room.list[room_id].spectatorsId[Room.list[room_id].id]!==undefined){
+      delete Room.list[room_id].spectatorsId[player_socket.id];
+    }
+
+    delete Room.list[room_id].socketlist[player_socket.id];
+    Room.list[room_id].currentlyPlayers -=1;
+    socket.emit('leftSuccess',{state:true});
+    console.log(Room.list);
+
+});
+
 
 });
 
@@ -302,13 +321,12 @@ setInterval(function(){
 //Player.update();
 var pack = Room.update();
 
-//console.log(Room.list);
-//console.log(Room.list);
+
 //console.log(Room.list);
 
   for(var i in SOCKET_LIST){
     var socket = SOCKET_LIST[i];
-    var room_id = Room.witchRoomIsPlayer(socket);
+    var room_id = Room.witchRoomIsPlayer(socket.id);
 
       if(Room.list[room_id] !== undefined){
     //  socket.emit("initPack", Room.list[room_id].initPack);
