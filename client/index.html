@@ -87,12 +87,15 @@ var html = "";
   else{
     for(var a=0;a<data.length;a++){
 
-      html += "<div class='col bg-dark'>Room:</div><div class='col bg-dark' >Currently players: "+data[a].players+"</div>";
+      html += "<div class='col bg-dark'>Room:</div><div class='col bg-dark' >Currently players: "+data[a].players+"/"+data[a].maxplayers+"</div><div class='col'><button class='btn btn-primary' onclick='joinroom("+data[a].roomid+")'>Join Room</button></div>";
 
     }
   }
 room_menu.innerHTML = html;
 });
+var joinroom = function(roomid){
+  socket.emit('joinroom',roomid);
+}
 
 var Img = {};
 Img.player = new Image();

@@ -297,6 +297,10 @@ socket.on('findNewRoom', function(data){
   }
 console.log(Room.list);
 });
+socket.on('joinroom',function(data){
+  Room.list[data].addPlayer(socket);
+  socket.emit('joinRoomSuccess',{state:true});
+});
 
 socket.on("leftRoom", function(data){
   console.log(data);
@@ -328,7 +332,8 @@ for(var i in Room.list){
   if(room.currentlyPlayers>0){
   var packk = {
     roomid:room.id,
-    players: room.currentlyPlayers
+    players: room.currentlyPlayers,
+    maxplayers: room.maxPlayer
   };
   pack.push(packk);
 }
