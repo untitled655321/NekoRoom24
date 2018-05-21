@@ -299,14 +299,14 @@ socket.on("leftRoom", function(data){
   console.log(data);
   var player_socket = data;
 var room_id = Room.witchRoomIsPlayer(player_socket);
-    if(Room.list[room_id].players[player_socket.id]!==undefined){
-      Room.list[room_id].removePlayer(Room.list[room_id].id,player_socket.id);
+    if(Room.list[room_id].players[player_socket]!==undefined){
+      Room.list[room_id].removePlayer(Room.list[room_id].id,player_socket);
     }
     if(Room.list[room_id].spectatorsId[Room.list[room_id].id]!==undefined){
-      delete Room.list[room_id].spectatorsId[player_socket.id];
+      delete Room.list[room_id].spectatorsId[player_socket];
     }
 
-    delete Room.list[room_id].socketlist[player_socket.id];
+    delete Room.list[room_id].socketlist[player_socket];
     Room.list[room_id].currentlyPlayers -=1;
     socket.emit('leftSuccess',{state:true});
     console.log(Room.list);
