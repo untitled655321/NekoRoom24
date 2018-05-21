@@ -21,6 +21,10 @@ socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
 });
 
+var Img = {};
+Img.player = new Image();
+Img.player.src = 'player.png';
+
   var Player = function(initPack){
     var self ={
       id: initPack.id,
@@ -31,11 +35,63 @@ socket.on('joinRoomSuccess',function(data){
       pressingUp: initPack.pressingRight,
       pressingLeft: initPack.pressingLeft,
       pressingUp: initPack.pressingUp,
-      pressingDown: initPack.pressingDown
+      pressingDown: initPack.pressingDown,
+      animation_counter:0
 
     };
     self.draw = function(){
-      ctx.fillText("P",self.x,self.y);
+        var width = Img.player.width ;
+        var height = Img.player.height/3;
+        var grid_height = Img.player.height/9;
+        var grid_width= Img.player.width/2;
+        var start_x_animation = 0;
+        var start_y_animation = 0;
+        if(self.pressingRight||self.pressingLeft||self.pressingUp||self.pressingDown){
+          if(self.pressingRight){
+            if(self.pressingUp){
+              start_y_animation = grid_height *8;
+
+            }
+            else if(self.pressingDown)
+            {
+              start_y_animation = grid_height *6;
+
+            }
+            else{
+              start_y_animation = grid_height*2;
+            }
+
+          }
+          else if(self.pressingLeft){
+            if(self.pressingUp){
+              start_y_animation = grid_height *7;
+
+            }
+            else if(self.pressingDown)
+            {
+              start_y_animation = grid_height *5;
+
+            }
+            else{
+              start_y_animation = grid_height;
+            }
+          }
+          else if(self.pressingUp){
+            start_y_animation = grid_height*3;
+
+          }
+          else if(self.pressingDown)
+          {
+            start_y_animation = grid_height*4;
+
+          }
+
+
+          start_x_animation = grid_width*(self.animation_counter%2);
+        }
+            //console.log(self.animation_counter%2);
+            ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,self.x-width/8,self.y-height/8,width/4,height/4);
+            //ctx.fillText("P",self.x,self.y);
     }
     Player.list[self.id] = self;
     return self;
@@ -81,8 +137,10 @@ socket.on('joinRoomSuccess',function(data){
            var player = player_array;
            Player.list[player.id].x = player.x;
            Player.list[player.id].y = player.y;
-
-
+           Player.list[player.id].pressingRight = player.pressingRight;
+           Player.list[player.id].pressingLeft = player.pressingLeft;
+           Player.list[player.id].pressingUp = player.pressingUp;
+           Player.list[player.id].pressingDown = player.pressingDown;
         }
       }
       }
@@ -122,6 +180,11 @@ socket.on('joinRoomSuccess',function(data){
     }
 
   },40);
+  setInterval(function(){
+  for(var i in Player.list){
+    Player.list[i].animation_counter +=1;
+  }
+},100);
 
 
 
