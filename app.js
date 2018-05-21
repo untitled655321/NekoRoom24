@@ -37,14 +37,17 @@ var Room = function(){
     socket.on("disconnect",function(){
 
       if(self.players[socket.id]!==undefined){
+        self.currentlyPlayers -=1;
+
         self.removePlayer(self.id,socket.id);
       }
       if(self.spectatorsId[self.id]!==undefined){
         delete self.spectatorsId[socket.id];
       }
 
+      if(self.socketlist[socket.id] !== undefined){
       delete self.socketlist[socket.id];
-      self.currentlyPlayers -=1;
+    }
       console.log(Room.list);
     });
   }
@@ -299,6 +302,8 @@ socket.on("leftRoom", function(data){
   console.log(data);
   var player_socket = data;
 var room_id = Room.witchRoomIsPlayer(player_socket);
+
+if(Room.list[room_id] !== undefined){
     if(Room.list[room_id].players[player_socket]!==undefined){
       Room.list[room_id].removePlayer(Room.list[room_id].id,player_socket);
     }
@@ -310,9 +315,33 @@ var room_id = Room.witchRoomIsPlayer(player_socket);
     Room.list[room_id].currentlyPlayers -=1;
     socket.emit('leftSuccess',{state:true});
     console.log(Room.list);
+}
 
 });
 
+//socket to get package with room available , data : room id, currently palyers
+socket.on('getRooms', function(){
+var pack = [];
+if(Room.list !== {}){
+for(var i in Room.list){
+  var room = Room.list[i];
+  if(room.currentlyPlayers>0){
+  var packk = {
+    roomid:room.id,
+    players: room.currentlyPlayers
+  };
+  pack.push(packk);
+}
+}
+}
+console.log(pack);
+socket.emit('rooms', pack);
+});
+
+
+socket.on("disconnect",function(){
+  return;
+});
 
 });
 
@@ -322,7 +351,7 @@ setInterval(function(){
 var pack = Room.update();
 
 
-//console.log(Room.list);
+console.log(Room.list);
 
   for(var i in SOCKET_LIST){
     var socket = SOCKET_LIST[i];
