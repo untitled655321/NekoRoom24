@@ -73,7 +73,6 @@ socket.on('leftSuccess',function(data){
     if(data.state){
   join_game_button.style = "display:inline-block";
   left_game_button.style = "display:none";
-  socket.emit('getRooms',{});
   room_menu.style = "display:inline-block";
   Player.list = {};
 }
@@ -257,6 +256,7 @@ socket.on('selfId',function(data){
   selfId= data;
 });
   setInterval(function(){
+    socket.emit('getRooms',{});
 
     ctx.clearRect(0,0,WIDTH,HEIGHT);
     drawMap();
