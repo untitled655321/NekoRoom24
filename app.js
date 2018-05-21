@@ -5,7 +5,7 @@ var http = require('http');
 var serv = http.Server(app);
 
 var port = process.env.PORT || 3000;
-serv.listen(3000);
+serv.listen(port);
 console.log("Server started, listening on the port: "+port+" ...");
 
 app.use('/',express.static('client'));
