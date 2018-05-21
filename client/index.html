@@ -167,8 +167,9 @@ var y  = self.y - Player.list[selfId].y + HEIGHT/2;
           }
 
 
-          start_x_animation = grid_width*(self.animation_counter%2);
         }
+        start_x_animation = grid_width*(self.animation_counter%2);
+
             //console.log(self.animation_counter%2);
             ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
             //ctx.fillText("P",self.x,self.y);
