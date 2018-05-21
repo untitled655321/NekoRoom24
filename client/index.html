@@ -3,8 +3,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </head>
 <body style="background-color:black; color:white;">
-  <div class="container">
-    <div class="col">
 
 <div id="gameDiv">
   <div id="gameScreen">
@@ -16,8 +14,7 @@
 </div>
 </div>
 
-</div>
-</div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
 
@@ -25,11 +22,23 @@
 <script>
 var join_game_button = document.getElementById("join_game_button");
 var left_game_button = document.getElementById("left_game_button");
-var ctx = document.getElementById("canvas").getContext("2d");
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 ctx.font = "30px";
 var WIDTH = 500;
 var HEIGHT = 500;
 var socket = io();
+
+var resizeCanvas = function(){
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+}
+
+window.addEventListener('resize', function(){
+  resizeCanvas();
+});
 
 var joinGame = function(){
   socket.emit('findNewRoom',{gamemode:'casual',id:socket.id});
@@ -212,7 +221,7 @@ socket.on('selfId',function(data){
 });
   setInterval(function(){
 
-    ctx.clearRect(0,0,500,500);
+    ctx.clearRect(0,0,WIDTH,HEIGHT);
     drawMap();
     for(var i in Player.list){
       var player  = Player.list[i];
