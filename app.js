@@ -201,13 +201,21 @@ self.update = function(){
       self.spdY = self.maxSpd;
     else
       self.spdY = 0;
+
+      if(self.x<=0)
+        self.x=0;
+      else if(self.x>=500)
+        self.x=500;
+      else if(self.y<=0)
+        self.y = 0;
+      else if(self.y>=500)
+        self.y = 500;
   super_update();
 }
 
 
 return self;
 }
-Player.list = {};
 Player.onConnection = function(socket){
   var player = Player(socket);
 
