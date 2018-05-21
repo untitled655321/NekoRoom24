@@ -1,8 +1,16 @@
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</head>
+<body style="background-color:black; color:white;">
+  <div class="container">
+    <div class="col">
 <div id="gameDiv">
 <canvas id="canvas" width="500" height="500" style="position:absolute;border: solid 1px black"></canvas>
 <button id="join_game_button" onclick="joinGame()" style="position:absolute; top:250px;left:250px;">Join Game</button>
 </div>
-
+</div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
 
@@ -11,7 +19,8 @@
 var join_game_button = document.getElementById("join_game_button");
 var ctx = document.getElementById("canvas").getContext("2d");
 ctx.font = "30px";
-
+var WIDTH = 500;
+var HEIGHT = 500;
 var socket = io();
 
 var joinGame = function(){
@@ -24,6 +33,8 @@ socket.on('joinRoomSuccess',function(data){
 var Img = {};
 Img.player = new Image();
 Img.player.src = 'player.png';
+Img.map = new Image();
+Img.map.src = 'map.png';
 
   var Player = function(initPack){
     var self ={
@@ -40,6 +51,9 @@ Img.player.src = 'player.png';
 
     };
     self.draw = function(){
+      var x = self.x - Player.list[selfId].x + WIDTH/2;
+var y  = self.y - Player.list[selfId].y + HEIGHT/2;
+
         var width = Img.player.width ;
         var height = Img.player.height/3;
         var grid_height = Img.player.height/9;
@@ -90,7 +104,7 @@ Img.player.src = 'player.png';
           start_x_animation = grid_width*(self.animation_counter%2);
         }
             //console.log(self.animation_counter%2);
-            ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,self.x-width/8,self.y-height/8,width/4,height/4);
+            ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
             //ctx.fillText("P",self.x,self.y);
     }
     Player.list[self.id] = self;
@@ -171,9 +185,14 @@ Img.player.src = 'player.png';
     }
   });
 
+var selfId = "";
+socket.on('selfId',function(data){
+  selfId= data;
+});
   setInterval(function(){
 
     ctx.clearRect(0,0,500,500);
+    drawMap();
     for(var i in Player.list){
       var player  = Player.list[i];
       player.draw();
@@ -186,7 +205,15 @@ Img.player.src = 'player.png';
   }
 },100);
 
+var drawMap = function(){
 
+  var player = Player.list[selfId];
+  if(player!==undefined){
+    var x = WIDTH/2 - player.x;
+    var y  = HEIGHT/2 - player.y;
+  ctx.drawImage(Img.map,x-67,y-50,645,645);
+}
+}
 
 document.onkeydown  = function(event){
   if(event.keyCode == 68)
@@ -221,3 +248,5 @@ Object.size = function(obj) {
 };
 
 </script>
+
+</body>

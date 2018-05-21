@@ -204,11 +204,11 @@ self.update = function(){
 
       if(self.x<=0)
         self.x=0;
-      else if(self.x>=500)
+      if(self.x>=500)
         self.x=500;
-      else if(self.y<=0)
+      if(self.y<=0)
         self.y = 0;
-      else if(self.y>=500)
+      if(self.y>=500)
         self.y = 500;
   super_update();
 }
@@ -317,6 +317,7 @@ var pack = Room.update();
         //console.log(pack[i]);
         if(pack[i].roomid==room_id){
           socket.emit("updatePack",pack[i]);
+          socket.emit("selfId",socket.id);
         }
       }
       socket.emit("removePack",Room.list[room_id].removePack);
