@@ -60,6 +60,8 @@ var joinGame = function(){
 socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
   left_game_button.style = "display:block";
+  room_menu.innerHTML = "";
+
 });
 var leftGame = function(){
   socket.emit('leftRoom',socket.id);
@@ -79,15 +81,15 @@ socket.on('leftSuccess',function(data){
 });
 
 socket.on('rooms',function(data){
-  console.log(data);
   if(data.length<=0)
     data = "There is no rooms";
   else{
     for(var a=0;a<data.length;a++){
 
-      for(var i in data[i]){
+      for(var i in data[a]){
         var room_description = data[a][i];
-      room_menu.innerHTML = room_description;
+        console.log(room_description);
+      room_menu.innerHTML += room_description;
     }
     }
   }
