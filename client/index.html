@@ -3,20 +3,35 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </head>
 <body style="background-color:black; color:white;  margin:0px;    overflow: hidden;">
-
+<div class="container">
+  <div class="row">
 <div id="gameDiv">
   <div id="gameScreen">
 <canvas id="canvas" width="500" height="500" style="position:absolute;border: solid 1px black"></canvas>
 </div>
+</div>
+<div class="row">
 <div id="playerUi" style="position:absolute; top:0;left:0px;">
   <button id="join_game_button" onclick="joinGame()" class="btn btn-primary"style="position:absolute; top:250px;left:250px;">Join Game</button>
   <button id="left_game_button" onclick="leftGame()" class="btn btn-primary" style="position:absolute; display:none;">Left Room</button>
   <button id="new_room_button" onclick="newRoom()" class="btn btn-primary" style="position:absolute; display:none;">New Room</button>
 
-  <div id="rooms_menu" style="position:absolute;"></div>
-</div>
+<div id="room_div" style="overflow-y:scroll;height:500px;"class="col">
+  <div id="rooms_menu" style="position:absolute; "></div>
 </div>
 
+  <div id="chat-div" style="margin-top:520px;">
+    <div id="chat-text" class="col justify-content-right"style="width:500px; height:100px; overflow-y:scroll;">
+      <div> Hello! </div>
+    </div>
+    <form id="chat-form">
+      <input id="chat-input" type="text" style="width:500px;"></input>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+</div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
@@ -27,6 +42,8 @@ var join_game_button = document.getElementById("join_game_button");
 var left_game_button = document.getElementById("left_game_button");
 var new_room_button = document.getElementById("new_room_button");
 var room_menu = document.getElementById("rooms_menu");
+var room_div = document.getElementById("room_div");
+
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 ctx.font = "30px";
@@ -41,6 +58,9 @@ var resizeCanvas = function(){
 
   left_game_button.style.top = HEIGHT/2;
   left_game_button.style.left = WIDTH/2;
+
+  room_div.style.width = WIDTH*0.15;
+  room_div.style.height = HEIGHT;
 
 
   join_game_button.style.top = HEIGHT/2;
