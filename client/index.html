@@ -56,10 +56,13 @@ window.addEventListener('resize', function(){
 var joinGame = function(){
   socket.emit('findNewRoom',{gamemode:'casual',id:socket.id});
 }
+
+var in_room = false;
 socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
   left_game_button.style = "display:block";
   room_menu.innerHTML = "";
+  in_room = true;
 
 });
 var leftGame = function(){
@@ -73,6 +76,7 @@ socket.on('leftSuccess',function(data){
   join_game_button.style = "display:inline-block";
   left_game_button.style = "display:none";
   Player.list = {};
+  in_room = false;
 }
 }
 });
@@ -85,9 +89,14 @@ var html = "";
     for(var a=0;a<data.length;a++){
 
       html += "<div class='col bg-dark'>Room:"+data[a].roomid+"</div><div class='col bg-dark' >Currently players: "+data[a].players+"/"+data[a].maxplayers+"</div>";
-      if(data[a].players<data[a].maxplayers){
-      html += "<div class='col bg-dark border-bottom'><button class='btn btn-primary' onclick='joinroom("+data[a].roomid+")'>Join Room</button></div>";
+
+   if(in_room==true){
+      html += "<div class='col bg-dark border-bottom' style='color:green;'>You Are currently in a room, click left and then connect to other rooms!</div>";
+
     }
+    else if(data[a].players<data[a].maxplayers){
+    html += "<div class='col bg-dark border-bottom'><button class='btn btn-primary' onclick='joinroom("+data[a].roomid+")'>Join Room</button></div>";
+  }
     else{
       html += "<div class='col bg-dark border-bottom' style='color:red;'>Maximum Players, can't join this room</div>";
 
