@@ -14,7 +14,9 @@
 <div class="row">
 <div id="playerUi" style="position:absolute; top:0;left:0px;">
   <button id="join_game_button" onclick="joinGame()" class="btn btn-primary"style="position:absolute; top:250px;left:250px;">Join Game</button>
-
+  <div id="index_content">
+  <img id="img_logo" style="position:absolute;"src="logo.gif"></img>
+</div>
 <div id="room_div" style="overflow-y:scroll;height:500px;"class="col">
   <button id="left_game_button" onclick="leftGame()" class="btn btn-primary" style="position:absolute; display:none;">Left Room</button>
   <button id="new_room_button" onclick="newRoom()" class="btn btn-primary" style="position:absolute; display:none;">New Room</button>
@@ -49,6 +51,8 @@ var chat_div = document.getElementById("chat-div");
 var chat_text = document.getElementById("chat-text");
 var chatForm = document.getElementById("chat-form");
 var chatInput = document.getElementById("chat-input");
+var img_logo = document.getElementById("img_logo");
+var index_content = document.getElementById("index_content");
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -65,6 +69,11 @@ var resizeCanvas = function(){
   left_game_button.style.top = HEIGHT/2;
   left_game_button.style.left = WIDTH/2;
 
+  img_logo.style.top = HEIGHT/4;
+  img_logo.style.left = WIDTH/2.7;
+  img_logo.style.width = WIDTH*0.2;
+  img_logo.style.height = HEIGHT*0.2;
+
   room_div.style.width = WIDTH*0.15;
   room_div.style.height = HEIGHT;
 
@@ -75,7 +84,7 @@ var resizeCanvas = function(){
   chat_text.style.height = HEIGHT*0.95 ;
 
 
-  join_game_button.style.top = HEIGHT/2;
+  join_game_button.style.top = HEIGHT/1.6;
   join_game_button.style.left = WIDTH/2;
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
@@ -97,6 +106,8 @@ var newRoom = function(){
 var in_room = false;
 socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
+  index_content.style = "display:none";
+
   left_game_button.style = "display:block";
   new_room_button.style = "display:none";
   room_menu.innerHTML = "";
@@ -177,6 +188,8 @@ Img.player = new Image();
 Img.player.src = 'player.png';
 Img.map = new Image();
 Img.map.src = 'map.png';
+Img.logo = new Image();
+Img.logo.src = 'logo.gif';
 
   var Player = function(initPack){
     var self ={
