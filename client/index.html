@@ -2,36 +2,38 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </head>
-<body style="background-color:black; color:white;  margin:0px;    overflow: hidden;">
-<div class="container">
+<body style="background-color:white; color:black;  margin:0px;    overflow: hidden;">
+
   <div class="row">
 <div id="gameDiv">
   <div id="gameScreen">
-<canvas id="canvas" width="500" height="500" style="position:absolute;border: solid 1px black"></canvas>
+<canvas id="canvas" width="500" height="500" style="position:absolute;"></canvas>
 </div>
 </div>
+
 <div class="row">
 <div id="playerUi" style="position:absolute; top:0;left:0px;">
   <button id="join_game_button" onclick="joinGame()" class="btn btn-primary"style="position:absolute; top:250px;left:250px;">Join Game</button>
+
+<div id="room_div" style="overflow-y:scroll;height:500px;"class="col">
   <button id="left_game_button" onclick="leftGame()" class="btn btn-primary" style="position:absolute; display:none;">Left Room</button>
   <button id="new_room_button" onclick="newRoom()" class="btn btn-primary" style="position:absolute; display:none;">New Room</button>
 
-<div id="room_div" style="overflow-y:scroll;height:500px;"class="col">
-  <div id="rooms_menu" style="position:absolute; "></div>
+  <div id="rooms_menu" style="margin:0px;"></div>
 </div>
 
-  <div id="chat-div" style="margin-top:520px;">
-    <div id="chat-text" class="col justify-content-right"style="width:500px; height:100px; overflow-y:scroll;">
+  <div id="chat-div" style=" position:absolute;top:0px;left:500px;width:300px;">
+    <div id="chat-text" style=" overflow-y:scroll;">
       <div> Hello! </div>
     </div>
     <form id="chat-form">
-      <input id="chat-input" type="text" style="width:500px;"></input>
+      <input id="chat-input" type="text" ></input>
     </form>
   </div>
 </div>
 </div>
 </div>
-</div>
+
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
@@ -43,6 +45,10 @@ var left_game_button = document.getElementById("left_game_button");
 var new_room_button = document.getElementById("new_room_button");
 var room_menu = document.getElementById("rooms_menu");
 var room_div = document.getElementById("room_div");
+var chat_div = document.getElementById("chat-div");
+var chat_text = document.getElementById("chat-text");
+var chatForm = document.getElementById("chat-form");
+var chatInput = document.getElementById("chat-input");
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -62,16 +68,21 @@ var resizeCanvas = function(){
   room_div.style.width = WIDTH*0.15;
   room_div.style.height = HEIGHT;
 
+  chat_div.style.width = WIDTH*0.2;
+  chat_div.style.height = HEIGHT;
+
+  chat_div.style.left= WIDTH*0.8;
+  chat_text.style.height = HEIGHT*0.95 ;
+
 
   join_game_button.style.top = HEIGHT/2;
   join_game_button.style.left = WIDTH/2;
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
 }
-
-
-
 resizeCanvas();
+
+
 window.addEventListener('resize', function(){
   resizeCanvas();
 });
@@ -141,6 +152,21 @@ var joinroom = function(roomid){
 var joinroom = function(roomid){
   socket.emit('joinroom',roomid);
 }
+
+
+socket.on('addChat', function(data){
+  chat_text.innerHTML += '<div>'+data+'</div>';
+});
+
+chatForm.onsubmit = function(e){
+  e.preventDefault();
+
+  socket.emit('sendMsgToServer', chatInput.value);
+
+  chatInput.value = ' ';
+}
+
+
 
 var Img = {};
 Img.player = new Image();

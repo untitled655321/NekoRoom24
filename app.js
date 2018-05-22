@@ -326,7 +326,16 @@ if(Room.list[room_id] !== undefined){
     console.log(Room.list);
 }
 
+
 });
+
+socket.on('sendMsgToServer', function(data){
+  console.log(data);
+            for(var i in SOCKET_LIST){
+              SOCKET_LIST[i].emit('addChat',data);
+            }
+          });
+
 
 //socket to get package with room available , data : room id, currently palyers
 socket.on('getRooms', function(){
@@ -344,7 +353,7 @@ for(var i in Room.list){
 }
 }
 }
-console.log(pack);
+//console.log(pack);
 socket.emit('rooms', pack);
 });
 
@@ -361,7 +370,7 @@ setInterval(function(){
 var pack = Room.update();
 
 
-console.log(Room.list);
+//console.log(Room.list);
 
   for(var i in SOCKET_LIST){
     var socket = SOCKET_LIST[i];
