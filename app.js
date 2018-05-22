@@ -116,6 +116,7 @@ Room.initPack = function(room_id){
   var room = Room.list[room_id];
     pack.push({
       players: room.players,
+      roomid: room.id
 
     });
 
@@ -331,9 +332,13 @@ if(Room.list[room_id] !== undefined){
 
 socket.on('sendMsgToServer', function(data){
   console.log(data);
-            for(var i in SOCKET_LIST){
-              SOCKET_LIST[i].emit('addChat',data);
+        if(data.roomid!=0){
+            for(var i in Room.list){
+              for(var a in Room.list[i].socketlist){
+              Room.list[i].socketlist[a].emit('addChat',data.message);
             }
+            }
+          }
           });
 
 
