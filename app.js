@@ -302,6 +302,11 @@ socket.on('joinroom',function(data){
   socket.emit('joinRoomSuccess',{state:true});
 });
 
+socket.on('newRoom',function(data){
+  var room = Room.createRoom();
+  room.addPlayer(socket);
+  socket.emit('joinRoomSuccess',{state:true});
+});
 socket.on("leftRoom", function(data){
   console.log(data);
   var player_socket = data;
