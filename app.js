@@ -355,7 +355,7 @@ socket.on('sendMsgToServer', function(data){
         if(data.roomid!=0){
 
               for(var a in Room.list[data.roomid].socketlist){
-              Room.list[data.roomid].socketlist[a].emit('addChat',data.message);
+              Room.list[data.roomid].socketlist[a].emit('addChat',""+socket.id.substring(1,7)+" written: "+data.message);
 
             }
             for(var a in Room.list[data.roomid].players){
