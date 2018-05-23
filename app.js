@@ -279,6 +279,8 @@ socket.on('findNewRoom', function(data){
       if(current_room.maxPlayer>current_room.currentlyPlayers){
         current_room.addPlayer(socket);
         socket.emit('joinRoomSuccess',{state:true});
+        socket.emit('addChat',"You have join room: "+current_room.id);
+
         connected = true;
         if(connected == true)
           break;
@@ -289,24 +291,36 @@ socket.on('findNewRoom', function(data){
       var room = Room.createRoom();
       room.addPlayer(socket);
       socket.emit('joinRoomSuccess',{state:true});
+
+      socket.emit('addChat',"You have created and join room: "+room.id);
+
     }
   }
   else{
     var room = Room.createRoom();
     room.addPlayer(socket);
     socket.emit('joinRoomSuccess',{state:true});
+
+    socket.emit('addChat',"You have created and join room: "+room.id);
+
+
   }
 console.log(Room.list);
 });
 socket.on('joinroom',function(data){
   Room.list[data].addPlayer(socket);
   socket.emit('joinRoomSuccess',{state:true});
+
+  socket.emit('addChat',"You have join room: "+data);
+
+
 });
 
 socket.on('newRoom',function(data){
   var room = Room.createRoom();
   room.addPlayer(socket);
   socket.emit('joinRoomSuccess',{state:true});
+  socket.emit('addChat',"You have created and join room: "+room.id);
 });
 socket.on("leftRoom", function(data){
   console.log(data);
@@ -324,6 +338,11 @@ if(Room.list[room_id] !== undefined){
     delete Room.list[room_id].socketlist[player_socket];
     Room.list[room_id].currentlyPlayers -=1;
     socket.emit('leftSuccess',{state:true});
+
+
+  socket.emit('addChat',"You have left room: "+room_id);
+
+
     console.log(Room.list);
 }
 
@@ -333,7 +352,7 @@ if(Room.list[room_id] !== undefined){
 socket.on('sendMsgToServer', function(data){
   console.log(data);
         if(data.roomid!=0){
-            
+
               for(var a in Room.list[data.roomid].socketlist){
               Room.list[data.roomid].socketlist[a].emit('addChat',data.message);
             }
