@@ -202,7 +202,8 @@ Img.logo.src = 'logo.gif';
       pressingLeft: initPack.pressingLeft,
       pressingUp: initPack.pressingUp,
       pressingDown: initPack.pressingDown,
-      animation_counter:0
+      animation_counter:0,
+      message: ""
 
     };
     self.draw = function(){
@@ -261,6 +262,10 @@ var y  = self.y - Player.list[selfId].y + HEIGHT/2;
 
             //console.log(self.animation_counter%2);
             ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
+            ctx.font = "17px Arial bold";
+            ctx.fillStyle = 'white';
+            ctx.fillText(self.message,x,y);
+
             //ctx.fillText("P",self.x,self.y);
     }
     Player.list[self.id] = self;
@@ -315,6 +320,8 @@ var current_roomid = 0;
            Player.list[player.id].pressingLeft = player.pressingLeft;
            Player.list[player.id].pressingUp = player.pressingUp;
            Player.list[player.id].pressingDown = player.pressingDown;
+           Player.list[player.id].message = player.message;
+
         }
       }
       }

@@ -189,6 +189,7 @@ self.pressingLeft = false;
 self.pressingUp = false;
 self.pressingDown = false;
 self.maxSpd = 10;
+self.message ="";
 
 var super_update = self.update;
 self.update = function(){
@@ -355,7 +356,13 @@ socket.on('sendMsgToServer', function(data){
 
               for(var a in Room.list[data.roomid].socketlist){
               Room.list[data.roomid].socketlist[a].emit('addChat',data.message);
+
             }
+            for(var a in Room.list[data.roomid].players){
+              if(Room.list[data.roomid].players[a].id == socket.id){
+            Room.list[data.roomid].players[a].message = data.message;
+}
+          }
 
           }
           });
