@@ -280,7 +280,7 @@ socket.on('findNewRoom', function(data){
       if(current_room.maxPlayer>current_room.currentlyPlayers){
         current_room.addPlayer(socket);
         socket.emit('joinRoomSuccess',{state:true});
-        socket.emit('addChat',"You have join room: "+current_room.id);
+        socket.emit('addChat',"<div style='color:green'>You have join room: "+current_room.id+"</div>");
 
         connected = true;
         if(connected == true)
@@ -293,7 +293,7 @@ socket.on('findNewRoom', function(data){
       room.addPlayer(socket);
       socket.emit('joinRoomSuccess',{state:true});
 
-      socket.emit('addChat',"You have created and join room: "+room.id);
+      socket.emit('addChat',"<div style='color:green'>You have created and join room: "+room.id+"</div>");
 
     }
   }
@@ -302,7 +302,7 @@ socket.on('findNewRoom', function(data){
     room.addPlayer(socket);
     socket.emit('joinRoomSuccess',{state:true});
 
-    socket.emit('addChat',"You have created and join room: "+room.id);
+    socket.emit('addChat',"<div style='color:green'>You have created and join room: "+room.id+"</div>");
 
 
   }
@@ -312,7 +312,7 @@ socket.on('joinroom',function(data){
   Room.list[data].addPlayer(socket);
   socket.emit('joinRoomSuccess',{state:true});
 
-  socket.emit('addChat',"You have join room: "+data);
+  socket.emit('addChat',"<div style='color:green'>You have join room: "+data+"</div>");
 
 
 });
@@ -321,7 +321,7 @@ socket.on('newRoom',function(data){
   var room = Room.createRoom();
   room.addPlayer(socket);
   socket.emit('joinRoomSuccess',{state:true});
-  socket.emit('addChat',"You have created and join room: "+room.id);
+  socket.emit('addChat',"<div style='color:green'>You have created and join room: "+room.id)+"</div>";
 });
 socket.on("leftRoom", function(data){
   console.log(data);
@@ -341,7 +341,7 @@ if(Room.list[room_id] !== undefined){
     socket.emit('leftSuccess',{state:true});
 
 
-  socket.emit('addChat',"You have left room: "+room_id);
+  socket.emit('addChat',"<div style='color:red'>You have left room: "+room_id+"</div>");
 
 
     console.log(Room.list);
