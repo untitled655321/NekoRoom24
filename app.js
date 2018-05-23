@@ -351,7 +351,7 @@ if(Room.list[room_id] !== undefined){
 });
 
 socket.on('sendMsgToServer', function(data){
-  console.log(data);
+  //console.log(data);
         if(data.roomid!=0){
 
               for(var a in Room.list[data.roomid].socketlist){
