@@ -16,7 +16,7 @@ var io = require("socket.io")(serv,{});
 var Room = function(){
   var self = {
     id:Math.random(),
-    maxPlayer: 10,
+    maxPlayer: 100,
     currentlyPlayers: 0,
     socketlist:{},
     players:{},
