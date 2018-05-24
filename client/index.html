@@ -1,4 +1,11 @@
 <head>
+  <meta property="og:url"           content="https://nekoroom.herokuapp.com/" />
+   <meta property="og:type"          content="website" />
+   <meta property="og:title"         content="Neko Room" />
+   <meta property="og:description"   content="Neko Room , join Neko room . Become Cat Today!!!" />
+   <meta property="og:image"         content="https://nekoroom.herokuapp.com/logo.gif" />
+
+
 <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -27,9 +34,20 @@
   <button id="left_game_button" onclick="leftGame()" class="btn btn-primary" style="position:absolute; display:none;">Left Room</button>
   <button id="new_room_button" onclick="newRoom()" class="btn btn-primary" style="position:absolute; display:none;">New Room</button>
 
+
   <div id="rooms_menu" style="margin:0px;"></div>
 </div>
-
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/pl_PL/sdk.js#xfbml=1&version=v3.0';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div id="fb-like" style="position:absolute;">
+<div class="fb-like" data-href="https://www.facebook.com/Neko-Room-179943236043106/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="true" ></div>
+</div>
   <div id="chat-div" style=" position:absolute;top:0px;left:500px;width:300px;">
     <div id="chat-text" style=" overflow-y:scroll;">
       <div> Hello! </div>
@@ -59,6 +77,7 @@ var chatForm = document.getElementById("chat-form");
 var chatInput = document.getElementById("chat-input");
 var img_logo = document.getElementById("img_logo");
 var index_content = document.getElementById("index_content");
+var fb_like = document.getElementById("fb-like");
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -79,6 +98,9 @@ var resizeCanvas = function(){
   img_logo.style.left = WIDTH/2.7;
   img_logo.style.width = WIDTH*0.2;
   img_logo.style.height = HEIGHT*0.3;
+
+  fb_like.style.top = HEIGHT/4;
+  fb_like.style.left = WIDTH/2.7;
 
   room_div.style.width = WIDTH*0.15;
   room_div.style.height = HEIGHT;
@@ -119,6 +141,8 @@ var in_room = false;
 socket.on('joinRoomSuccess',function(data){
   join_game_button.style = "display:none";
   index_content.style = "display:none";
+fb_like.style = "display:none";
+
 
   left_game_button.style = "display:block";
   new_room_button.style = "display:none";
@@ -217,6 +241,7 @@ Img.logo.src = 'logo.gif';
       pressingUp: initPack.pressingUp,
       pressingDown: initPack.pressingDown,
       animation_counter:0,
+      skin: Img.player,
       message: ""
 
     };
@@ -275,7 +300,7 @@ var y  = self.y - Player.list[selfId].y + HEIGHT/2;
         start_x_animation = grid_width*(self.animation_counter%2);
 
             //console.log(self.animation_counter%2);
-            ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
+            ctx.drawImage(self.skin,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
             ctx.font = "25px VT323";
             ctx.save();
             ctx.fillStyle = 'black';
