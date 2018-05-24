@@ -106,7 +106,7 @@ var joinGame = function(){
   socket.emit('findNewRoom',{gamemode:'casual',id:socket.id});
 }
 var newRoom = function(){
-  if(current_room !== 0){
+  if(current_roomid !== 0){
   socket.emit('newRoom',{gamemode:'casual',id:socket.id});
 }
 }
