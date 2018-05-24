@@ -362,28 +362,21 @@ var current_roomid = 0;
     socket.on("updatePack", function(data){
       if(data !== null){
         //console.log(data);
-        if(data[Object.keys(data)[1]] !== undefined){
-          var Object_with_players = data[Object.keys(data)[1]];
-          var size = Object.size(Object_with_players);
-        //console.log(size);
-          //console.log(player_array);
-          for(var i=0;i<size;i++){
-          //console.log(i);
-
-          var player_array = Object_with_players[Object.keys(Object_with_players)[i]];
-            //console.log(player_array.id);
-            //console.log(player_array.id)
-           var player = player_array;
-           Player.list[player.id].x = player.x;
-           Player.list[player.id].y = player.y;
-           Player.list[player.id].pressingRight = player.pressingRight;
-           Player.list[player.id].pressingLeft = player.pressingLeft;
-           Player.list[player.id].pressingUp = player.pressingUp;
-           Player.list[player.id].pressingDown = player.pressingDown;
-           Player.list[player.id].message = player.message;
-
+        if(data !== undefined){
+        for(var i in data){
+          for(var a in data[i]){
+            var player = data[i][a];
+            Player.list[player.id].x = player.x;
+            Player.list[player.id].y = player.y;
+            Player.list[player.id].pressingRight = player.pressingRight;
+            Player.list[player.id].pressingLeft = player.pressingLeft;
+            Player.list[player.id].pressingUp = player.pressingUp;
+            Player.list[player.id].pressingDown = player.pressingDown;
+            Player.list[player.id].message = player.message;
+          }
         }
       }
+
       }
     });
 
