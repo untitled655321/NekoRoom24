@@ -309,11 +309,12 @@ socket.on('findNewRoom', function(data){
 console.log(Room.list);
 });
 socket.on('joinroom',function(data){
+  if(Room.list[data]!==undefined){
   Room.list[data].addPlayer(socket);
   socket.emit('joinRoomSuccess',{state:true});
 
   socket.emit('addChat',"<div style='color:green'>You have join room: "+data+"</div>");
-
+}
 
 });
 
