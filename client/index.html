@@ -192,6 +192,7 @@ else{
   chat_text.innerHTML+="<div style='color:red'>You have to be inside room to write messages! My little Nekko ^^</div>";
 }
   chatInput.value = '';
+chatInput.blur();
 }
 
 
@@ -276,10 +277,13 @@ var y  = self.y - Player.list[selfId].y + HEIGHT/2;
             //console.log(self.animation_counter%2);
             ctx.drawImage(Img.player,start_x_animation,start_y_animation,grid_width,grid_height,x-width/8,y-height/8,width/4,height/4);
             ctx.font = "25px VT323";
-            ctx.fillStyle = 'white';
+            ctx.save();
+            ctx.fillStyle = 'black';
+            ctx.globalCompositeOperation = "xor";
+
             ctx.textAlign = 'center';
             ctx.fillText(self.message,x,y-34);
-
+            ctx.restore();
             //ctx.fillText("P",self.x,self.y);
     }
     Player.list[self.id] = self;
