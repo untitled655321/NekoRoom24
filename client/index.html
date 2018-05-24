@@ -107,7 +107,11 @@ var joinGame = function(){
 }
 var newRoom = function(){
   if(current_roomid !== 0){
+    return;
+}
+else{
   socket.emit('newRoom',{gamemode:'casual',id:socket.id});
+
 }
 }
 
