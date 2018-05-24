@@ -35,6 +35,7 @@
   <button id="new_room_button" onclick="newRoom()" class="btn btn-primary" style="position:absolute; display:none;">New Room</button>
 
 
+
   <div id="rooms_menu" style="margin:0px;"></div>
 </div>
 <div id="fb-root"></div>
@@ -48,6 +49,14 @@
 <div id="fb-like" style="position:absolute;">
 <div class="fb-like" data-href="https://www.facebook.com/Neko-Room-179943236043106/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="true" ></div>
 </div>
+
+<form id="donate" style="position:absolute;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="KKFKJTEUBZ88C">
+<input id="donate-button" type="image" src="https://nekoroom.herokuapp.com/donate.png" border="0" name="submit" alt="PayPal – Płać wygodnie i bezpiecznie">
+<img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
+</form>
+
   <div id="chat-div" style=" position:absolute;top:0px;left:500px;width:300px;">
     <div id="chat-text" style=" overflow-y:scroll;">
       <div> Hello! </div>
@@ -78,8 +87,9 @@ var chatInput = document.getElementById("chat-input");
 var img_logo = document.getElementById("img_logo");
 var index_content = document.getElementById("index_content");
 var fb_like = document.getElementById("fb-like");
-
+var donate = document.getElementById("donate");
 var canvas = document.getElementById("canvas");
+var donate_button = document.getElementById("donate-button");
 var ctx = canvas.getContext("2d");
 ctx.font = "30px";
 var WIDTH = 500;
@@ -101,6 +111,11 @@ var resizeCanvas = function(){
 
   fb_like.style.top = HEIGHT/4;
   fb_like.style.left = WIDTH/2.7;
+
+  donate.style.top = HEIGHT/7;
+  donate.style.left = WIDTH/2.7;
+  donate_button.style.width = WIDTH*0.1;
+  donate_button.style.height = HEIGHT*0.08;
 
   room_div.style.width = WIDTH*0.15;
   room_div.style.height = HEIGHT;
