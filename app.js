@@ -3,6 +3,31 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var serv = http.Server(app);
+var request = require("request");
+var mysql = require('mysql');
+
+
+
+var con = mysql.createConnection({
+  host: "nekoroomdb.cwrmwyfo2vxj.us-east-1.rds.amazonaws.com",
+  user: "BlackYinn12xd3",
+  password: "Yin12xd3",
+  database: "NekoRoomDb"
+});
+
+
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  var sql = "SELECT * FROM users";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+
 
 var port = process.env.PORT || 3000;
 serv.listen(port);
@@ -11,7 +36,12 @@ console.log("Server started, listening on the port: "+port+" ...");
 app.use('/',express.static('client'));
 
 var io = require("socket.io")(serv,{});
-
+request.get("http://localhost:3000/getusers", (error, response, body) => {
+    if(error) {
+        return console.log(error);
+    }
+    console.log(body);
+});
 //constructor for room entity to grup grups of players
 var Room = function(){
   var self = {
@@ -426,5 +456,6 @@ var pack = Room.update();
     Room.list[i].initPack = {};
     Room.list[i].removePack = {};
   }
+
 
 },1000/40);
